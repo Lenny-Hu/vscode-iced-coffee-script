@@ -18,7 +18,8 @@
  */
 
 import * as _ from 'lodash';
-const CoffeeScript = require('coffeescript');
+// const CoffeeScript = require('coffeescript');
+const IcedCoffeeScript = require('iced-coffee-script');
 import * as FSExtra from 'fs-extra';
 const MergeDeep = require('merge-deep');
 import * as Path from 'path';
@@ -56,7 +57,8 @@ class Workspace extends vscode_helpers.WorkspaceBase {
                 '.vscode',
                 'settings.json'
             )),
-            section: 'coffeescript.compile',
+            // section: 'coffeescript.compile',
+            section: 'icedCoffeescript.compile',
         };
     }
 
@@ -189,7 +191,9 @@ class Workspace extends vscode_helpers.WorkspaceBase {
                 sourceMap: vscode_helpers.toBooleanSafe(CFG.sourceMap, true),                
             };
 
-            let result: string | CompilerResult = CoffeeScript.compile((await FSExtra.readFile(FILE)).toString('utf8'),
+            // let result: string | CompilerResult = CoffeeScript.compile((await FSExtra.readFile(FILE)).toString('utf8'),
+            //                                                            MergeDeep( CFG_OPTS, CFG.options ));
+            let result: string | CompilerResult = IcedCoffeeScript.compile((await FSExtra.readFile(FILE)).toString('utf8'),
                                                                        MergeDeep( CFG_OPTS, CFG.options ));
 
             if (_.isString(result)) {
@@ -219,7 +223,7 @@ class Workspace extends vscode_helpers.WorkspaceBase {
                 js += `
 
 //# sourceMappingURL=${ SOURCE_MAP_FILE_NAME }
-//# sourceURL=coffeescript`;
+//# sourceURL=icedcoffeescript`;
             }
             
             // write JavaScript file
@@ -228,7 +232,7 @@ class Workspace extends vscode_helpers.WorkspaceBase {
         }
         catch (e) {
             vscode.window.showErrorMessage(
-                `[CoffeeScript] ${ vscode_helpers.toStringSafe(e) }`
+                `[IcedCoffeeScript] ${ vscode_helpers.toStringSafe(e) }`
             );
         }
     }
